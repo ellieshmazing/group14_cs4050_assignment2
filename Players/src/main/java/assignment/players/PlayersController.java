@@ -1,4 +1,4 @@
-package assignment.birds;
+package assignment.players;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -27,14 +27,14 @@ import java.util.logging.Logger;
  *
  * @author Ouda
  */
-public class BirdsController implements Initializable {
+public class PlayersController implements Initializable {
 
     @FXML
     private MenuBar mainMenu;
     @FXML
     private ImageView image;
     @FXML
-    private BorderPane BirdPortal;
+    private BorderPane PlayerPortal;
     @FXML
     private Label title;
     @FXML
@@ -42,16 +42,16 @@ public class BirdsController implements Initializable {
     @FXML
     private Button play;
     @FXML
-    private Button puase;
+    private Button pause;
     @FXML
-    private ComboBox size;
+    private ComboBox position;
     @FXML
     private TextField name;
     Media media;
     MediaPlayer player;
     OrderedDictionary database = null;
-    BirdRecord bird = null;
-    int birdSize = 1;
+    PlayerRecord playerRec = null;
+    int playerPosition = 1;
 
     @FXML
     public void exit() {
@@ -60,59 +60,59 @@ public class BirdsController implements Initializable {
     }
 
     public void find() {
-        DataKey key = new DataKey(this.name.getText(), birdSize);
+        DataKey key = new DataKey(this.name.getText(), playerPosition);
         try {
-            bird = database.find(key);
-            showBird();
+            playerRec = database.find(key);
+            showPlayer();
         } catch (DictionaryException ex) {
             displayAlert(ex.getMessage());
         }
     }
 
     public void delete() {
-        BirdRecord previousBird = null;
+        PlayerRecord previousPlayer = null;
         try {
-            previousBird = database.predecessor(bird.getDataKey());
+            previousPlayer = database.predecessor(playerRec.getDataKey());
         } catch (DictionaryException ex) {
 
         }
-        BirdRecord nextBird = null;
+        PlayerRecord nextPlayer = null;
         try {
-            nextBird = database.successor(bird.getDataKey());
+            nextPlayer = database.successor(playerRec.getDataKey());
         } catch (DictionaryException ex) {
 
         }
-        DataKey key = bird.getDataKey();
+        DataKey key = playerRec.getDataKey();
         try {
             database.remove(key);
         } catch (DictionaryException ex) {
             System.out.println("Error in delete "+ ex);
         }
         if (database.isEmpty()) {
-            this.BirdPortal.setVisible(false);
-            displayAlert("No more birds in the database to show");
+            this.PlayerPortal.setVisible(false);
+            displayAlert("No more players in the database to show");
         } else {
-            if (previousBird != null) {
-                bird = previousBird;
-                showBird();
-            } else if (nextBird != null) {
-                bird = nextBird;
-                showBird();
+            if (previousPlayer != null) {
+                playerRec = previousPlayer;
+                showPlayer();
+            } else if (nextPlayer != null) {
+                playerRec = nextPlayer;
+                showPlayer();
             }
         }
     }
 
-    private void showBird() {
+    private void showPlayer() {
         play.setDisable(false);
-        puase.setDisable(true);
+        pause.setDisable(true);
         if (player != null) {
             player.stop();
         }
-        String img = bird.getImage();
-        Image birdImage = new Image("file:src/main/resources/assignment/birds/images/" + img);
-        image.setImage(birdImage);
-        title.setText(bird.getDataKey().getBirdName());
-        about.setText(bird.getAbout());
+        String img = playerRec.getImage();
+        Image playerImage = new Image("file:src/main/resources/assignment/players/images/" + img);
+        image.setImage(playerImage);
+        title.setText(playerRec.getDataKey().getPlayerName());
+        about.setText(playerRec.getAbout());
     }
 
     private void displayAlert(String msg) {
@@ -126,7 +126,7 @@ public class BirdsController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(scene);
 
-            stage.getIcons().add(new Image("file:src/main/resources/assignment/birds/images/UMIcon.png"));
+            stage.getIcons().add(new Image("file:src/main/resources/assignment/players/images/UMIcon.png"));
             stage.setTitle("Dictionary Exception");
             controller.setAlertText(msg);
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -137,16 +137,16 @@ public class BirdsController implements Initializable {
         }
     }
 
-    public void getSize() {
-        switch (this.size.getValue().toString()) {
-            case "Small":
-                this.birdSize = 1;
+    public void getPosition() {
+        switch (this.position.getValue().toString()) {
+            case "Guard":
+                this.playerPosition = 1;
                 break;
-            case "Medium":
-                this.birdSize = 2;
+            case "Forward":
+                this.playerPosition = 2;
                 break;
-            case "Large":
-                this.birdSize = 3;
+            case "Center":
+                this.playerPosition = 3;
                 break;
             default:
                 break;
@@ -170,17 +170,17 @@ public class BirdsController implements Initializable {
     }
 
     public void play() {
-        String filename = "src/main/resources/assignment/birds/sounds/" + bird.getSound();
+        String filename = "src/main/resources/assignment/players/sounds/" + playerRec.getSound();
         media = new Media(new File(filename).toURI().toString());
         player = new MediaPlayer(media);
         play.setDisable(true);
-        puase.setDisable(false);
+        pause.setDisable(false);
         player.play();
     }
 
-    public void puase() {
+    public void pause() {
         play.setDisable(false);
-        puase.setDisable(true);
+        pause.setDisable(true);
         if (player != null) {
             player.stop();
         }
@@ -190,44 +190,44 @@ public class BirdsController implements Initializable {
         Scanner input;
         int line = 0;
         try {
-            String birdName = "";
+            String playerName = "";
             String description;
-            int size = 0;
-            input = new Scanner(new File("BirdsDatabase.txt"));
+            int position = 0;
+            input = new Scanner(new File("PlayersDatabase.txt"));
             while (input.hasNext()) // read until  end of file
             {
                 String data = input.nextLine();
                 switch (line % 3) {
                     case 0:
-                        size = Integer.parseInt(data);
+                        position = Integer.parseInt(data);
                         break;
                     case 1:
-                        birdName = data;
+                        playerName = data;
                         break;
                     default:
                         description = data;
-                        database.insert(new BirdRecord(new DataKey(birdName, size), description, birdName + ".mp3", birdName + ".jpg"));
+                        database.insert(new PlayerRecord(new DataKey(playerName, position), description, playerName + ".mp3", playerName + ".jpg"));
                         break;
                 }
                 line++;
             }
         } catch (IOException e) {
-            System.out.println("There was an error in reading or opening the file: BirdsDatabase.txt");
+            System.out.println("There was an error in reading or opening the file: PlayersDatabase.txt");
             System.out.println(e.getMessage());
         } catch (DictionaryException ex) {
-            Logger.getLogger(BirdsController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlayersController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.BirdPortal.setVisible(true);
+        this.PlayerPortal.setVisible(true);
         this.first();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         database = new OrderedDictionary();
-        size.setItems(FXCollections.observableArrayList(
+        position.setItems(FXCollections.observableArrayList(
                 "Small", "Medium", "Large"
         ));
-        size.setValue("Small");
+        position.setValue("Small");
     }
 
 }

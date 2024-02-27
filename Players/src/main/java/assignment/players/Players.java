@@ -1,4 +1,4 @@
-package assignment.birds;
+package assignment.players;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,16 +11,16 @@ import javafx.stage.Stage;
  *
  * @author Ouda
  */
-public class Birds extends Application {
+public class Players extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("birds-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("players-view.fxml"));
 
         Scene scene = new Scene(root);
 
-        stage.getIcons().add(new Image("file:src/main/resources/assignment/birds/images/UMIcon.png"));
-        stage.setTitle("Birds Portal");
+        stage.getIcons().add(new Image("file:src/main/resources/assignment/players/images/UMIcon.png"));
+        stage.setTitle("Players Portal");
 
         stage.setScene(scene);
         stage.show();
