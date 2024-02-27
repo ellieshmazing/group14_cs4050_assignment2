@@ -194,6 +194,7 @@ public class PlayersController implements Initializable {
             String description;
             int position = 0;
             input = new Scanner(new File("PlayersDatabase.txt"));
+
             while (input.hasNext()) // read until  end of file
             {
                 String data = input.nextLine();
