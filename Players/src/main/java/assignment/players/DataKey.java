@@ -43,6 +43,5 @@ public class DataKey {
                     return -1;
             }
             return 1;
-            
 	}
 }

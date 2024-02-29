@@ -5,7 +5,7 @@ package assignment.players;
  * parts: a DataKey and the data associated with the DataKey.
  */
 public class PlayerRecord {
-
+    //Populated by fillDictionary function
     private DataKey key;
     private String about;
     private String sound;
