@@ -225,9 +225,9 @@ public class PlayersController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         database = new OrderedDictionary();
         position.setItems(FXCollections.observableArrayList(
-                "Small", "Medium", "Large"
+                "Guard", "Forward", "Center"
         ));
-        position.setValue("Small");
+        position.setValue("Guard");
     }
 
 }

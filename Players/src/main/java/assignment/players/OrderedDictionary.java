@@ -5,7 +5,7 @@ public class OrderedDictionary implements OrderedDictionaryADT {
     Node root;
 
     OrderedDictionary() {
-        root = new Node();
+        root = null;
     }
 
     /**
