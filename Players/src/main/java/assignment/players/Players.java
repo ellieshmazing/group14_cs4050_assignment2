@@ -19,11 +19,16 @@ public class Players extends Application {
 
         Scene scene = new Scene(root);
 
-        stage.getIcons().add(new Image("file:src/main/resources/assignment/players/images/UMIcon.png"));
+        System.out.println("hello\n");
+
+        stage.getIcons().add(new Image("file:Players/src/main/resources/assignment/players/images/UMIcon.png"));
         stage.setTitle("Players Portal");
 
         stage.setScene(scene);
         stage.show();
+
+        System.out.println("hello2\n");
+
 
 
     }

@@ -109,7 +109,7 @@ public class PlayersController implements Initializable {
             player.stop();
         }
         String img = playerRec.getImage();
-        Image playerImage = new Image("file:src/main/resources/assignment/players/images/" + img);
+        Image playerImage = new Image("file:Players/src/main/resources/assignment/players/images/" + img);
         image.setImage(playerImage);
         title.setText(playerRec.getDataKey().getPlayerName());
         about.setText(playerRec.getAbout());
@@ -154,23 +154,71 @@ public class PlayersController implements Initializable {
     }
 
     public void first() {
-        // Write this method
+        try {
+            playerRec = database.smallest(); // Assuming there's a method to get the first record
+            showPlayer();
+        } catch (DictionaryException ex) {
+            displayAlert("Error finding the first player: " + ex.getMessage());
+        }
     }
 
     public void last() {
-        // Write this method
+        try {
+            playerRec = database.largest(); // Assuming there's a method to get the last record
+            showPlayer();
+        } catch (DictionaryException ex) {
+            displayAlert("Error finding the last player: " + ex.getMessage());
+        }
     }
 
     public void next() {
-        // Write this method;
+        if (playerRec == null) {
+            first();
+            return;
+        }
+        try {
+            PlayerRecord nextPlayer = database.successor(playerRec.getDataKey());
+            if (nextPlayer != null) {
+                playerRec = nextPlayer;
+                showPlayer();
+            } else {
+                displayAlert("This is the last player in the database.");
+            }
+        } catch (DictionaryException ex) {
+            displayAlert("Error finding the next player: " + ex.getMessage());
+        }
     }
 
     public void previous() {
-        // Write this method
+        if (playerRec == null) {
+            last();
+            return;
+        }
+        try {
+            PlayerRecord prevPlayer = database.predecessor(playerRec.getDataKey());
+            if (prevPlayer != null) {
+                playerRec = prevPlayer;
+                showPlayer();
+            } else {
+                displayAlert("This is the first player in the database.");
+            }
+        } catch (DictionaryException ex) {
+            displayAlert("Error finding the previous player: " + ex.getMessage());
+        }
     }
 
+
     public void play() {
-        String filename = "src/main/resources/assignment/players/sounds/" + playerRec.getSound();
+        String fn = "Players/src/main/resources/assignment/players/sounds/" + playerRec.getSound();
+        File file = new File(fn);
+        System.out.println("Looking for file at: " + file.getAbsolutePath());
+        if (file.exists()) {
+            System.out.println("File exists.");
+        } else {
+            System.out.println("File does not exist.");
+        }
+
+        String filename = "Players/src/main/resources/assignment/players/sounds/" + playerRec.getSound();
         media = new Media(new File(filename).toURI().toString());
         player = new MediaPlayer(media);
         play.setDisable(true);
